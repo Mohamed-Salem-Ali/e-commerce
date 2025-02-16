@@ -137,17 +137,20 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# REST Framework settings
+# REST framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 # dj-rest-auth settings
-ACCOUNT_LOGIN_METHODS = {'username','email'} # or "username_email" if using both
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_LOGIN_METHODS = {'email','username'} # or "username_email" if using both
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Can be 'mandatory', 'optional', or 'none'
 
 SITE_ID = 1  # Required for allauth
+
+AUTH_USER_MODEL = 'authentication.Customer'
