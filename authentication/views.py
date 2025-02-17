@@ -10,3 +10,17 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+    
+def register(request):
+    context={}
+    return render(request,'authentication/register.html')
+
+
+def login(request):
+    context={}
+    return render(request,'authentication/login.html')
+
+
+def profile(request):
+    context={}
+    return render(request,'authentication/profile.html')

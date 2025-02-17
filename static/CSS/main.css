@@ -34,6 +34,10 @@ h6 {
     background-color: #4f868c !important;
 }
 
+#nav-btn {
+    margin-right: 10px;
+}
+
 #cart-icon {
     width: 25px;
     display: inline-block;
