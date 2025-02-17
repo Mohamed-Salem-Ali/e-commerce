@@ -154,4 +154,4 @@ REST_FRAMEWORK = {
 ACCOUNT_LOGIN_METHODS = {'email','username'} # or "username_email" if using both
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Can be 'mandatory', 'optional', or 'none'
 SITE_ID = 1  # Required for allauth
-AUTH_USER_MODEL = 'authentication.Customer'
+#AUTH_USER_MODEL = 'authentication.Customer'
