@@ -6,7 +6,15 @@ class Product(models.Model):
 	name = models.CharField(max_length=50)
 	price = models.FloatField()
 	description  = models.CharField(max_length=300)
+	image = models.ImageField(null=True, blank= True)
 
+	@property
+	def imageURL(self):
+		try:
+			url = self.image.url
+		except:
+			url = 'images/placeholder.png'
+		return url
 	def __str__(self):
 		return self.name
 
