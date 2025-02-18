@@ -42,6 +42,10 @@
 
                 <a href="{% url 'register' %}" id="nav-btn" class="btn btn-warning me-2">Register</a>
 
+                <span class="user-info">Hello, {{request.user}}</span>
+                <a href="{% url 'logout' %}" id="nav-btn" class="btn btn-warning me-2">Logout</a>
+
+
                 <a href="{% url 'cart' %}">
                     <img id="cart-icon" src="{% static 'images/cart.png' %}">
                 </a>

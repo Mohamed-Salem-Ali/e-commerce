@@ -110,6 +110,12 @@ h6 {
     display: none !important;
 }
 
+.user-info {
+    font-size: 18px;
+    color: #fff;
+    margin-right: 20px;
+}
+
 /* Register and Login Form */
 .user_card {
     width: 350px;
