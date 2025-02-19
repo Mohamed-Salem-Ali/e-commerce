@@ -2,49 +2,55 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import *
+from django.contrib.auth.decorators import login_required
+from authentication.decrators import allowed_users
 
-# Create your views here.
+@login_required(login_url='login')
+#@allowed_users(allowed_roles=['admin'])
 def home(request):
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
     products = Product.objects.all()
-    context = {'products':products}
+    context = {'products':products,'items':items, 'order':order, 'cartItems':cartItems}
     return render(request,'core/home.html',context)
 
-
+@login_required(login_url='login')
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-		#Create empty cart for now for non-logged in user
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
-        
-
-    context = {'items':items, 'order':order}
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items':items, 'order':order, 'cartItems':cartItems}
     return render(request, 'core/cart.html', context)
 
-
+@login_required(login_url='login')
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-		#Create empty cart for now for non-logged in user
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
-        
-
-    context = {'items':items, 'order':order}
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items      
+    context = {'items':items, 'order':order, 'cartItems':cartItems}
     return render(request, 'core/checkout.html', context)
 
+@login_required(login_url='login')
+def ordersPage(request):
+    customer = request.user.customer  
+    orders = Order.objects.filter(customer=customer).order_by('-date_ordered') 
+
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'core/orders.html', context)
+
+
+
+@login_required(login_url='login')
 def updateItem(request):
     data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
-    print('Action:', action)
-    print('Product:', productId)
 
     customer = request.user.customer
     product = Product.objects.get(id=productId)
