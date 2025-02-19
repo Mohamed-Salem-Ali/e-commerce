@@ -40,14 +40,11 @@
                         <input class="form-control" type="text" name="state" placeholder="State..">
                     </div>
                     <div class="form-field">
-                        <input class="form-control" type="text" name="country" placeholder="Country">
-                    </div>
-                    <div class="form-field">
                         <input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
                     </div>
                 </div>
                 <hr>
-                <input class="btn btn-success btn-block" type="submit" value="Continue">
+                <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
             </form>
             <br>
             <div class="box-element hidden" id="payment-info">
@@ -60,6 +57,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    var total = '{{order.get_cart_total|floatformat:2}}'
     var form = document.getElementById('form')
     form.addEventListener('submit', function (e) {
         e.preventDefault()
@@ -74,6 +72,41 @@
 
     function submitFormData() {
         console.log('Payment button clicked')
+        var shippingInfo = {
+            'address': null,
+            'city': null,
+            'state': null,
+            'zipcode': null,
+        }
+        var userFormData = {
+            'name': '{{ request.user.customer.username }}',
+            'email': '{{ request.user.customer.email }}',
+            'total': total,
+        }
+        shippingInfo.address = form.address.value
+        shippingInfo.city = form.city.value
+        shippingInfo.state = form.state.value
+        shippingInfo.zipcode = form.zipcode.value
+        console.log('Shipping Info:', shippingInfo)
+        console.log('User Info:', userFormData)
+
+        var url = "/process_order/"
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'applicaiton/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo }),
+
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+                alert('Transaction completed');
+                window.location.href = "{% url 'home' %}"
+
+            })
     }
 </script>
 {% endblock content %}
