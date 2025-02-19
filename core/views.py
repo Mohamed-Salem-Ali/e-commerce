@@ -1,6 +1,6 @@
 import datetime
 import json
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
@@ -94,3 +94,12 @@ def processOrder(request):
     zipcode=data['shipping']['zipcode'],
     )
     return JsonResponse('Payment submitted..', safe=False)
+
+
+def product_detail(request, product_id):
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    cartItems = order.get_cart_items 
+    product = get_object_or_404(Product, id=product_id)
+    context = {'product': product,'cartItems':cartItems}
+    return render(request, 'core/product_detail.html', context)
