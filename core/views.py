@@ -5,6 +5,11 @@ from django.http import JsonResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
 from authentication.decrators import allowed_users
+# paypal
+from django.urls import  reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid #
 
 @login_required(login_url='login')
 #@allowed_users(allowed_roles=['admin'])
@@ -31,17 +36,35 @@ def checkout(request):
     customer = request.user.customer
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
     items = order.orderitem_set.all()
-    cartItems = order.get_cart_items      
-    context = {'items':items, 'order':order, 'cartItems':cartItems}
+    cartItems = order.get_cart_items
+    total = order.get_cart_total
+    host = request.get_host()
+    # PayPal Payment Data
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': total,
+        'item_name': 'Order',
+        'no_shipping': '2',
+        'invoice': str(uuid.uuid4()),
+        'currency_code': 'USD',
+        'notify_url': 'http://{}{}'.format(host, reverse("paypal-ipn")),
+        'return_url': 'http://{}{}'.format(host, reverse("payment_success")),
+        'cancel_return': 'http://{}{}'.format(host, reverse("payment_failed")),
+    }
+    paypal_form = PayPalPaymentsForm(initial=paypal_dict)
+    context = {'items': items, 'order': order, 'cartItems': cartItems, 'paypal_form': paypal_form}
     return render(request, 'core/checkout.html', context)
 
 @login_required(login_url='login')
 def ordersPage(request):
     customer = request.user.customer  
     orders = Order.objects.filter(customer=customer).order_by('-date_ordered') 
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    cartItems = order.get_cart_items
 
     context = {
         'orders': orders,
+        'cartItems': cartItems
     }
     return render(request, 'core/orders.html', context)
 
@@ -83,8 +106,6 @@ def processOrder(request):
     if total == order.get_cart_total:
         order.complete = True
     order.save()
-
-
     ShippingAddress.objects.create(
     customer=customer,
     order=order,
@@ -103,3 +124,9 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     context = {'product': product,'cartItems':cartItems}
     return render(request, 'core/product_detail.html', context)
+
+def payment_success(request):
+    return render(request,"core/payment_success.html")
+
+def payment_failed(request):
+    return render(request,"core/payment_failed.html")

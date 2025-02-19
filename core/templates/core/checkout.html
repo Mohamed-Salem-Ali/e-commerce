@@ -48,8 +48,9 @@
             </form>
             <br>
             <div class="box-element hidden" id="payment-info">
-                <small>Payment Options</small>
-                <button id="make-payment">Make payment</button>
+                <input id="make-payment" class="btn btn-success btn-block" type="submit" value="Submit Order">
+                <br>
+                <center>{{paypal_form.render}}</center>
             </div>
         </div>
 
@@ -71,7 +72,6 @@
             alert('the total amount is invalid.');
             return;
         }
-
         console.log('Form Submitted...')
         document.getElementById('form-button').classList.add("hidden");
         document.getElementById('payment-info').classList.remove("hidden");

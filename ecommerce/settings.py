@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     #project Apps
     'core',
     'authentication',
+    #paypal
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -157,3 +159,8 @@ ACCOUNT_LOGIN_METHODS = {'email','username'} # or "username_email" if using both
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Can be 'mandatory', 'optional', or 'none'
 SITE_ID = 1  # Required for allauth
 #AUTH_USER_MODEL = 'authentication.Customer'
+
+#paypal
+PAYPAL_TEST = True
+
+PAYPAL_RECEIVER_EMAIL = 'business@ecommerce-django.com'
