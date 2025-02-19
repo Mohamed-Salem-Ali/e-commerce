@@ -52,7 +52,7 @@ def logoutUser(request):
     return redirect('login')
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
+#@allowed_users(allowed_roles=['customer'])
 def profile(request):
     customer = request.user.customer
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
