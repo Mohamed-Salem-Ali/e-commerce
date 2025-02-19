@@ -61,6 +61,17 @@
     var form = document.getElementById('form')
     form.addEventListener('submit', function (e) {
         e.preventDefault()
+        var cartItems = '{{cartItems}}';
+        console.log(cartItems)
+        if (cartItems == 0) {
+            alert('You have no items in your cart.');
+            return;
+        }
+        if (!total || total <= 0) {
+            alert('the total amount is invalid.');
+            return;
+        }
+
         console.log('Form Submitted...')
         document.getElementById('form-button').classList.add("hidden");
         document.getElementById('payment-info').classList.remove("hidden");
@@ -73,15 +84,30 @@
     function submitFormData() {
         console.log('Payment button clicked')
         var shippingInfo = {
-            'address': null,
-            'city': null,
-            'state': null,
-            'zipcode': null,
-        }
+            'address': form.address.value.trim(),
+            'city': form.city.value.trim(),
+            'state': form.state.value.trim(),
+            'zipcode': form.zipcode.value.trim(),
+        };
         var userFormData = {
             'name': '{{ request.user.customer.username }}',
             'email': '{{ request.user.customer.email }}',
             'total': total,
+        }
+        var cartItems = '{{cartItems}}';
+        if (cartItems == 0) {
+            alert('You have no items in your cart.');
+            return;
+        }
+        if (!total || total <= 0) {
+            alert('the total amount is invalid.');
+            return;
+        }
+
+
+        if (!shippingInfo.address || !shippingInfo.city || !shippingInfo.state || !shippingInfo.zipcode) {
+            alert('Please fill in all shipping details.');
+            return;
         }
         shippingInfo.address = form.address.value
         shippingInfo.city = form.city.value
