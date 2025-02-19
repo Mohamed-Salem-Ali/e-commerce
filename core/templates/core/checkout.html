@@ -25,13 +25,55 @@
             <h5>Items: {{order.get_cart_items}}</h5>
             <h5>Total: EGP {{order.get_cart_total|floatformat:2}}</h5>
             <br>
+            <form id="form">
+                <div id="shipping-info">
+                    <hr>
+                    <h3>Shipping Information:</h3>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="address" placeholder="Address..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="city" placeholder="City..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="state" placeholder="State..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="country" placeholder="Country">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
+                    </div>
+                </div>
+                <hr>
+                <input class="btn btn-success btn-block" type="submit" value="Continue">
+            </form>
             <br>
-            <div class="box-element " id="payment-info">
+            <div class="box-element hidden" id="payment-info">
                 <small>Payment Options</small>
+                <button id="make-payment">Make payment</button>
             </div>
         </div>
 
 
     </div>
 </div>
+<script type="text/javascript">
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function (e) {
+        e.preventDefault()
+        console.log('Form Submitted...')
+        document.getElementById('form-button').classList.add("hidden");
+        document.getElementById('payment-info').classList.remove("hidden");
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function (e) {
+        submitFormData()
+    })
+
+    function submitFormData() {
+        console.log('Payment button clicked')
+    }
+</script>
 {% endblock content %}
