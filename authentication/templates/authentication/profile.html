@@ -1,5 +1,39 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
-<h2>Profile</h2>
+
+<br>
+<br>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-body">
+            <a class="btn btn-warning" href="{% url 'home' %}"> &#8592; Back to Home</a>
+            <hr>
+            <h3 style="text-align: center">{{request.user.username}} Profile</h3>
+            <hr>
+
+        </div>
+    </div>
+
+    <div class="col-md-9">
+
+        <div class="card card-body">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+
+                <input class="btn btn-primary" type="submit" name="Update Information">
+                {% if messages %}
+                <div class="alert-container">
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content%}

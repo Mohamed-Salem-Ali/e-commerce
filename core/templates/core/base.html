@@ -31,19 +31,22 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                 </li>
+                {% if request.user.is_authenticated %}
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'profile' %}">Profile <span class="sr-only">(current)</span></a>
                 </li>
+                {% endif %}
             </ul>
 
             <div class="form-inline my-2 my-lg-0">
-                <a href="{% url 'login' %}" id="nav-btn" class="btn btn-warning ">Login</a>
 
-
-                <a href="{% url 'register' %}" id="nav-btn" class="btn btn-warning me-2">Register</a>
-
-                <span class="user-info">Hello, {{request.user}}</span>
+                {% if request.user.is_authenticated %}
+                <span class="user-info">Hello, {{request.user.customer.username}}</span>
                 <a href="{% url 'logout' %}" id="nav-btn" class="btn btn-warning me-2">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" id="nav-btn" class="btn btn-warning ">Login</a>
+                <a href="{% url 'register' %}" id="nav-btn" class="btn btn-warning me-2">Register</a>
+                {% endif %}
 
 
                 <a href="{% url 'cart' %}">
