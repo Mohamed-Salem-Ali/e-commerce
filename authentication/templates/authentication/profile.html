@@ -34,6 +34,15 @@
                 {{ message }}
             </div>
             {% endfor %}
+            {% if form.errors %}
+            <div class="error-messages">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                    <li><strong>{{ field|title }}:</strong> {{ errors.0 }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
         {% endif %}
     </div>
