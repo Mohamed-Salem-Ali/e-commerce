@@ -81,9 +81,14 @@ Open your browser and go to `http://127.0.0.1:8000/`
 ---
 
 ## 📝 To-Do & Future Improvements
-- Add Stripe as another payment option.
-- Implement email notifications for order confirmations.
-- Improve UI with animations and better user experience.
+- Improve Code Readability 
+- Ensure Proper Validations and Error Handling
+- Use a .env file to store secrets and sensitive data.
+- Write Basic Unit Tests
+- Improve UI to better user experience.
+- Add another payment option.
+- Use docker and GitHub-actions
+- Deployment 
 
 ---
 
