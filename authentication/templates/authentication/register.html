@@ -4,37 +4,50 @@
 <div class="container h-100">
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
+
+            <!-- Form Title -->
             <div class="d-flex justify-content-center">
                 <h3 id="form-title">Register</h3>
             </div>
-            <div class="d-flex justify-content-center form_container">
 
+            <!-- Registration Form -->
+            <div class="d-flex justify-content-center form_container">
                 <form method="POST" action="">
                     {% csrf_token %}
+
+                    <!-- Username Field -->
                     <div class="input-group mb-3">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
                         {{form.username}}
                     </div>
+
+                    <!-- Email Field -->
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
                         </div>
                         {{form.email}}
                     </div>
+
+                    <!-- Password Field -->
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
                         {{form.password1}}
                     </div>
+
+                    <!-- Confirm Password Field -->
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
                         {{form.password2}}
                     </div>
+
+                    <!-- Display Form Errors -->
                     {% if form.errors %}
                     <div class="error-messages">
                         <ul>
@@ -44,12 +57,15 @@
                         </ul>
                     </div>
                     {% endif %}
+
+                    <!-- Submit Button -->
                     <div class="d-flex justify-content-center mt-3 login_container">
                         <input class="btn login_btn" type="submit" value="Register Account">
                     </div>
                 </form>
             </div>
 
+            <!-- Login Redirect -->
             <div class="mt-4">
                 <div class="d-flex justify-content-center links">
                     Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
@@ -58,16 +74,19 @@
         </div>
     </div>
 </div>
-<script>
 
+<!-- JavaScript for Placeholder and Input Styling -->
+<script>
     //Query All input fields
     var form_fields = document.getElementsByTagName('input')
+
+    // Setting Placeholder Texts
     form_fields[1].placeholder = 'Username..';
     form_fields[2].placeholder = 'Email..';
     form_fields[3].placeholder = 'Enter password...';
     form_fields[4].placeholder = 'Re-enter Password...';
 
-
+    // Adding Bootstrap Form Control Class to Inputs
     for (var field in form_fields) {
         form_fields[field].className += ' form-control'
     }

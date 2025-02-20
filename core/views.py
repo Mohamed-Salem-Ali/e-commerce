@@ -116,7 +116,7 @@ def processOrder(request):
     )
     return JsonResponse('Payment submitted..', safe=False)
 
-
+login_required(login_url='login')
 def product_detail(request, product_id):
     customer = request.user.customer
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
