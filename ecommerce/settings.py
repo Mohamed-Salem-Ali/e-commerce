@@ -42,11 +42,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
     'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
     
     #project Apps
     'core',
@@ -154,11 +150,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
-# dj-rest-auth settings
-ACCOUNT_LOGIN_METHODS = {'email','username'} # or "username_email" if using both
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Can be 'mandatory', 'optional', or 'none'
-SITE_ID = 1  # Required for allauth
-#AUTH_USER_MODEL = 'authentication.Customer'
 
 #paypal
 PAYPAL_TEST = True
