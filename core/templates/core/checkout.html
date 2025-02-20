@@ -1,30 +1,45 @@
 {% extends 'core/base.html' %}
 {% load static %}
+
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
         <div class="box-element">
+            <!-- Back button -->
             <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
             <hr>
+
             <h3>Order Summary</h3>
             <hr>
+
+            <!-- Loop through cart items -->
             {% for item in items %}
             <div class="cart-row">
                 <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
+
+                <!-- Item Name -->
                 <div style="flex:2">
                     <p>{{item.product.name}}</p>
                 </div>
+
+                <!-- Item Price -->
                 <div style="flex:1">
                     <p>EGP {{item.product.price|floatformat:2}}</p>
                 </div>
+
+                <!-- Item Quantity -->
                 <div style="flex:1">
                     <p>x{{item.quantity}}</p>
                 </div>
             </div>
             {% endfor %}
+
             <h5>Items: {{order.get_cart_items}}</h5>
+            <!-- Total Price -->
             <h5>Total: EGP {{order.get_cart_total|floatformat:2}}</h5>
             <br>
+
+            <!-- Shipping form -->
             <form id="form">
                 <div id="shipping-info">
                     <hr>
@@ -47,64 +62,82 @@
                 <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
             </form>
             <br>
+
+            <!-- Payment section (hidden by default) -->
             <div class="box-element hidden" id="payment-info">
                 <input id="make-payment" class="btn btn-success btn-block" type="submit" value="Submit Order">
                 <br>
-                <center>{{paypal_form.render}}</center>
+                <center>{{ paypal_form.render }}</center>
             </div>
         </div>
-
-
     </div>
 </div>
 <script type="text/javascript">
     var total = '{{order.get_cart_total|floatformat:2}}'
     var form = document.getElementById('form')
+
+    // Listen for form submission
     form.addEventListener('submit', function (e) {
-        e.preventDefault()
-        var cartItems = '{{cartItems}}';
-        console.log(cartItems)
+        e.preventDefault() // Prevent the default form submission behavior
+
+        // Parse the number of cart items
+        var cartItems = parseInt('{{cartItems}}');
+
+        // Check if the cart is empty
         if (cartItems == 0) {
             alert('You have no items in your cart.');
             return;
         }
+
+        // Validate the total amount
         if (!total || total <= 0) {
             alert('the total amount is invalid.');
             return;
         }
+
         console.log('Form Submitted...')
+
+        // Hide the form button and show the payment section
         document.getElementById('form-button').classList.add("hidden");
         document.getElementById('payment-info').classList.remove("hidden");
     })
 
+    // Listen for the payment button click event
     document.getElementById('make-payment').addEventListener('click', function (e) {
         submitFormData()
     })
 
+    // Function to handle order submission
     function submitFormData() {
         console.log('Payment button clicked')
+
+        // Collect shipping information from the form
         var shippingInfo = {
             'address': form.address.value.trim(),
             'city': form.city.value.trim(),
             'state': form.state.value.trim(),
             'zipcode': form.zipcode.value.trim(),
         };
+
+        // Collect user information
         var userFormData = {
             'name': '{{ request.user.customer.username }}',
             'email': '{{ request.user.customer.email }}',
             'total': total,
         }
-        var cartItems = '{{cartItems}}';
+
+        var cartItems = parseInt('{{cartItems}}');
         if (cartItems == 0) {
             alert('You have no items in your cart.');
             return;
         }
+
         if (!total || total <= 0) {
             alert('the total amount is invalid.');
             return;
         }
 
-
+        // Ensure all shipping fields are filled
         if (!shippingInfo.address || !shippingInfo.city || !shippingInfo.state || !shippingInfo.zipcode) {
             alert('Please fill in all shipping details.');
             return;
@@ -116,22 +149,24 @@
         console.log('Shipping Info:', shippingInfo)
         console.log('User Info:', userFormData)
 
-        var url = "/process_order/"
+        // API endpoint for processing the order
+        var url = "/process_order/";
+
+        // Send data to the server using the Fetch API
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'applicaiton/json',
+                'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
             },
-            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo }),
+            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo }), // Convert data to JSON format
 
         })
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success:', data);
                 alert('Transaction completed');
-                window.location.href = "{% url 'home' %}"
-
+                window.location.href = "{% url 'home' %}" // Redirect user to homepage after successful transaction
             })
     }
 </script>

@@ -5,19 +5,31 @@
     <div class="col-lg-12">
         <div class="box-element">
 
+            <!-- Button to Continue Shopping -->
             <a class="btn btn-outline-dark" href="{% url 'home' %}">&#x2190; Continue Shopping</a>
 
-            <br>
-            <br>
+            <br><br>
+
+            <!-- Loop through all user orders -->
             {% for order in orders %}
             <div class="box-element">
+
+                <!-- Display order details if the order is complete -->
                 {% if order.complete %}
                 <h4>Order ID: {{ order.transaction_id }}</h4>
                 <p>Date: {{ order.date_ordered }}</p>
                 {% endif %}
-                <p>Status: {% if order.complete %} <span style="color: green;">Completed</span> {% else %} <span
-                        style="color: red;">Not Completed</span> {% endif %}</p>
 
+                <!-- Order status indication -->
+                <p>Status:
+                    {% if order.complete %}
+                    <span style="color: green;">Completed</span>
+                    {% else %}
+                    <span style="color: red;">Not Completed</span>
+                    {% endif %}
+                </p>
+
+                <!-- Table Headers for Order Items -->
                 <div class="cart-row">
                     <div style="flex:2"><strong>Item</strong></div>
                     <div style="flex:1"><strong>Price</strong></div>
@@ -25,30 +37,38 @@
                     <div style="flex:1"><strong>Total</strong></div>
                 </div>
 
+                <!-- Loop through each item in the order -->
                 {% for item in order.orderitem_set.all %}
                 <div class="cart-row">
+
+                    <!-- Product Name -->
                     <div style="flex:2">
                         <p>{{ item.product.name }}</p>
                     </div>
+
+                    <!-- Product Price -->
                     <div style="flex:1">
                         <p>EGP{{ item.product.price|floatformat:2 }}</p>
                     </div>
+
+                    <!-- Total Items in Cart -->
                     <div style="flex:1">
                         <p>{{ item.quantity }}</p>
                     </div>
+
+                    <!-- Total Price -->
                     <div style="flex:1">
                         <p>EGP{{ item.get_total|floatformat:2 }}</p>
                     </div>
                 </div>
                 {% endfor %}
+
+                <!-- Display total order price -->
                 <p><strong>Total Order Price:</strong> EGP{{ order.get_cart_total|floatformat:2 }}</p>
             </div>
             <br>
             {% endfor %}
-            <br>
-            <br>
-            <br>
-
+            <br><br><br>
         </div>
     </div>
 </div>

@@ -5,20 +5,26 @@
 <head>
     <title>E-commerce</title>
 
+    <!-- Bootstrap CSS for styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
 
+    <!-- jQuery for dynamic functionalities -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
+    <!-- Custom CSS file -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 
-    <!-- responsive phone -->
+    <!-- Responsive design settings -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 </head>
 
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'home' %}">MSA</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -31,19 +37,19 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                 </li>
+
+                <!-- Authenticated User Pages -->
                 {% if request.user.is_authenticated %}
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'profile' %}">Profile <span class="sr-only">(current)</span></a>
                 </li>
-
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'orders' %}">Orders <span class="sr-only">(current)</span></a>
                 </li>
                 {% endif %}
             </ul>
-
+            <!-- Authentication Links -->
             <div class="form-inline my-2 my-lg-0">
-
                 {% if request.user.is_authenticated %}
                 <span class="user-info">Hello, {{request.user.customer.username}}</span>
                 <a href="{% url 'logout' %}" id="nav-btn" class="btn btn-warning me-2">Logout</a>
@@ -52,23 +58,23 @@
                 <a href="{% url 'register' %}" id="nav-btn" class="btn btn-warning me-2">Register</a>
                 {% endif %}
 
-
+                <!-- Shopping Cart -->
                 <a href="{% url 'cart' %}">
                     <img id="cart-icon" src="{% static 'images/cart.png' %}">
                 </a>
                 <p id="cart-total">{{cartItems}}</p>
-
             </div>
-
         </div>
     </nav>
     <hr />
+
+    <!-- Main Content Block -->
     <div class="container">
         {% block content %}
-
         {% endblock %}
     </div>
 
+    <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -81,18 +87,21 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 
+    <!-- Custom JavaScript -->
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 
     <script type="text/javascript">
+        // Retrieve logged-in user
         var user = '{{request.user}}'
 
+        // Function to retrieve CSRF token from cookies
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
+                const cookies = document.cookie.split(';'); // Split cookies into an array
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
+                    // Check if this cookie is the CSRF token
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -101,7 +110,6 @@
             }
             return cookieValue;
         }
-        // const csrftoken = getCookie('csrftoken');
     </script>
 </body>
 

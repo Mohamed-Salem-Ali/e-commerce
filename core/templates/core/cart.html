@@ -5,10 +5,12 @@
     <div class="col-lg-12">
         <div class="box-element">
 
+            <!-- Back to Home Button -->
             <a class="btn btn-outline-dark" href="{% url 'home' %}">&#x2190; Continue Shopping</a>
 
-            <br>
-            <br>
+            <br><br>
+
+            <!-- Cart Header Row -->
             <div class="cart-row">
                 <div style="flex:2"></div>
                 <div style="flex:2"><strong>Item</strong></div>
@@ -16,54 +18,77 @@
                 <div style="flex:1"><strong>Quantity</strong></div>
                 <div style="flex:1"><strong>Total</strong></div>
             </div>
+
+            <!-- Loop through cart items -->
             {% for item in items %}
             <div class="cart-row">
-                <div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div>
+
+                <!-- Product Image -->
+                <div style="flex:2">
+                    <img class="row-image" src="{{item.product.imageURL}}">
+                </div>
+
+                <!-- Product Name -->
                 <div style="flex:2">
                     <p>{{item.product.name}}</p>
                 </div>
+
+                <!-- Product Price -->
                 <div style="flex:1">
                     <p>EGP{{item.product.price|floatformat:2}}</p>
                 </div>
+
+                <!-- Product Quantity -->
                 <div style="flex:1">
                     <p class="quantity">{{item.quantity}}</p>
                     <div class="quantity">
+                        <!-- Increase Quantity Button -->
                         <img data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart"
-                            src="{% static  'images/arrow-up.png' %}">
+                            src="{% static  'images/arrow-up.png' %}" alt="Increase Quantity">
 
+                        <!-- Decrease Quantity Button -->
                         <img data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart"
-                            src="{% static  'images/arrow-down.png' %}">
+                            src="{% static  'images/arrow-down.png' %}" alt="Decrease Quantity">
+
                     </div>
                 </div>
+
+                <!-- Total Price for this Product -->
                 <div style="flex:1">
                     <p>EGP{{item.get_total|floatformat:2}}</p>
                 </div>
             </div>
             {% endfor %}
-            <br>
-            <br>
-            <div class="box-element">
 
+            <br><br>
+
+            <!-- Cart Summary -->
+            <div class="box-element">
                 <table class="table">
                     <tr>
+                        <!-- Total Items in Cart -->
                         <th>
                             <h5>Items: <strong>{{order.get_cart_items}}</strong></h5>
                         </th>
+
+                        <!-- Total Price -->
                         <th>
                             <h5>Total:<strong> EGP{{order.get_cart_total|floatformat:2}}</strong></h5>
                         </th>
+
+                        <!-- Checkout Button -->
                         <th>
                             <a style="float:right; margin:5px;" class="btn btn-success"
                                 href="{% url 'checkout' %}">Checkout</a>
+
                         </th>
                     </tr>
                 </table>
-
             </div>
 
             <br>
 
         </div>
     </div>
-
-    {% endblock content%}
+</div>
+{% endblock content%}

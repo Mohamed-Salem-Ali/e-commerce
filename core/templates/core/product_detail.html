@@ -2,20 +2,32 @@
 {% load static %}
 {% block content %}
 <div class="container mt-5">
+    <!-- Back button to navigate to the home page -->
     <a class="btn btn-outline-dark mb-3" href="{% url 'home' %}">&#x2190; Back to Home</a>
 
     <div class="row">
+        <!-- Left section: Displays product image -->
         <div class="col-md-6">
+
             {% if product.image %}
+
+            <!-- Display product image if available -->
             <img src="{{ product.image.url }}" class="img-fluid rounded">
+
+            <!-- Placeholder image if no product image is available -->
             {% else %}
             <img src="https://via.placeholder.com/400" class="img-fluid rounded" alt="No image available">
+
             {% endif %}
         </div>
+
+        <!-- Right section: Displays product details -->
         <div class="col-md-6">
             <h2>{{ product.name }}</h2>
             <h4 class="text-success">EGP{{ product.price|floatformat:2 }}</h4>
             <p>{{ product.description }}</p>
+
+            <!-- Button to add the product to the cart -->
             <button data-product="{{product.id}}" data-action="add" class="btn btn-primary add-btn update-cart">Add to
                 Cart</button>
         </div>
